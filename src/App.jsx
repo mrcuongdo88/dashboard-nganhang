@@ -5,9 +5,11 @@ import KPI from './components/KPI'
 import Filters from './components/Filters'
 import ApplicationTable from './components/ApplicationTable'
 import AddApplicationModal from './components/AddApplicationModal'
-import { initialApplications } from './data/mockData'
 import Timeline from './components/Timeline'
+
+import { initialApplications } from './data/mockData'
 import { exportToExcel } from './utils/exportExcel'
+
 export default function App() {
 
   const [applications, setApplications] = useState(() => {
@@ -34,6 +36,28 @@ export default function App() {
 
   }, [applications])
 
+  function addApplication(data) {
+
+    const newItem = {
+      id: Date.now(),
+      bank: data.bank,
+      fileType: data.fileType,
+      amount: data.amount,
+      progress: 10,
+      status: 'Đã tiếp nhận',
+      document: data.document
+        ? data.document.name
+        : null
+    }
+
+    setApplications([
+      newItem,
+      ...applications
+    ])
+
+    setShowModal(false)
+  }
+
   function deleteApplication(id) {
 
     const filtered = applications.filter(
@@ -42,27 +66,7 @@ export default function App() {
 
     setApplications(filtered)
   }
-function addApplication(data) {
 
-  const newItem = {
-    id: Date.now(),
-    bank: data.bank,
-    fileType: data.fileType,
-    amount: data.amount,
-    progress: 10,
-    status: 'Đã tiếp nhận',
-    document: data.document
-      ? data.document.name
-      : null
-  }
-
-  setApplications([
-    newItem,
-    ...applications
-  ])
-
-  setShowModal(false)
-}
   function updateProgress(id, value) {
 
     const updated = applications.map(item => {
@@ -119,9 +123,20 @@ function addApplication(data) {
 
       <div className="max-w-7xl mx-auto space-y-6">
 
-        <Header
-          onOpenModal={() => setShowModal(true)}
-        />
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+          <Header
+            onOpenModal={() => setShowModal(true)}
+          />
+
+          <button
+            onClick={() => exportToExcel(applications)}
+            className="bg-green-600 text-white px-5 py-3 rounded-2xl shadow-lg hover:bg-green-700"
+          >
+            Export Excel
+          </button>
+
+        </div>
 
         <KPI applications={applications} />
 
@@ -139,17 +154,16 @@ function addApplication(data) {
           updateStatus={updateStatus}
         />
 
+        <Timeline applications={applications} />
+
       </div>
-<AddApplicationModal
-  showModal={showModal}
-  setShowModal={setShowModal}
-  addApplication={addApplication}
-/><Timeline applications={applications} /><button
-  onClick={() => exportToExcel(applications)}
-  className="bg-green-600 text-white px-5 py-3 rounded-2xl"
->
-  Export Excel
-</button>
+
+      <AddApplicationModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        addApplication={addApplication}
+      />
+
     </div>
   )
 }
