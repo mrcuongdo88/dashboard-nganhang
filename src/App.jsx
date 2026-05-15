@@ -4,9 +4,10 @@ import Header from './components/Header'
 import KPI from './components/KPI'
 import Filters from './components/Filters'
 import ApplicationTable from './components/ApplicationTable'
-
+import AddApplicationModal from './components/AddApplicationModal'
 import { initialApplications } from './data/mockData'
-
+import Timeline from './components/Timeline'
+import { exportToExcel } from './utils/exportExcel'
 export default function App() {
 
   const [applications, setApplications] = useState(() => {
@@ -41,7 +42,27 @@ export default function App() {
 
     setApplications(filtered)
   }
+function addApplication(data) {
 
+  const newItem = {
+    id: Date.now(),
+    bank: data.bank,
+    fileType: data.fileType,
+    amount: data.amount,
+    progress: 10,
+    status: 'Đã tiếp nhận',
+    document: data.document
+      ? data.document.name
+      : null
+  }
+
+  setApplications([
+    newItem,
+    ...applications
+  ])
+
+  setShowModal(false)
+}
   function updateProgress(id, value) {
 
     const updated = applications.map(item => {
@@ -119,7 +140,16 @@ export default function App() {
         />
 
       </div>
-
+<AddApplicationModal
+  showModal={showModal}
+  setShowModal={setShowModal}
+  addApplication={addApplication}
+/><Timeline applications={applications} /><button
+  onClick={() => exportToExcel(applications)}
+  className="bg-green-600 text-white px-5 py-3 rounded-2xl"
+>
+  Export Excel
+</button>
     </div>
   )
 }

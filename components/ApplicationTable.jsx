@@ -1,5 +1,7 @@
 import { getStatusColor } from '../utils/helpers'
-
+<th className="text-left px-6 py-4">
+  Tài liệu
+</th>
 export default function ApplicationTable({
   applications,
   deleteApplication,
@@ -67,7 +69,23 @@ export default function ApplicationTable({
                 <td className="px-6 py-5">
                   {item.amount}
                 </td>
+<td className="px-6 py-5">
 
+  {item.document ? (
+
+    <span className="text-blue-600 text-sm font-medium">
+      📄 {item.document}
+    </span>
+
+  ) : (
+
+    <span className="text-slate-400 text-sm">
+      Chưa upload
+    </span>
+
+  )}
+
+</td>
                 <td className="px-6 py-5 min-w-[240px]">
 
                   <div className="space-y-3">
