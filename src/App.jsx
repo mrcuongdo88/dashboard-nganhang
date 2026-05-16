@@ -87,60 +87,53 @@ export default function App() {
 
   async function deleteApplication(id) {
 
-  const { error } =
+  console.log('DELETE ID:', id)
+
+  const response =
     await supabase
       .from('applications')
       .delete()
       .eq('id', Number(id))
+      .select()
 
-  if (error) {
+  console.log('DELETE RESPONSE:', response)
 
-    console.log(error)
-
-  } else {
-
-    fetchApplications()
-  }
+  fetchApplications()
 }
 
   async function updateProgress(id, value) {
 
-  const { error } =
+  console.log('UPDATE ID:', id)
+  console.log('UPDATE VALUE:', value)
+
+  const response =
     await supabase
       .from('applications')
       .update({
         progress: parseInt(value)
       })
       .eq('id', Number(id))
+      .select()
 
-  if (error) {
+  console.log('UPDATE RESPONSE:', response)
 
-    console.log(error)
-
-  } else {
-
-    fetchApplications()
-  }
+  fetchApplications()
 }
 
   async function updateStatus(id, value) {
 
-  const { error } =
+  const response =
     await supabase
       .from('applications')
       .update({
         status: value
       })
       .eq('id', Number(id))
+      .select()
 
-  if (error) {
+  console.log('STATUS RESPONSE:', response)
 
-    console.log(error)
-
-  } else {
-
-    fetchApplications()
-  }
+  fetchApplications()
 }
 
   function exportToExcel() {
