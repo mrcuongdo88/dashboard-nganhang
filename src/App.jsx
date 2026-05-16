@@ -929,7 +929,9 @@ export default function App() {
                   <th className="text-left px-6 py-4">
                     Follow-up
                   </th>
-
+<th className="text-left px-6 py-4">
+  Stage
+</th>
                   <th className="text-left px-6 py-4">
                     PDF
                   </th>
@@ -945,7 +947,6 @@ export default function App() {
               <tbody>
 
                 {filteredApplications.map(item => {
-
                   const aging =
                     calculateAging(
                       item.submission_date
@@ -955,7 +956,8 @@ export default function App() {
                     detectBank(
                       item.bank
                     )
-
+const stage =
+  getStage(item)
                   return (
 
                     <tr
@@ -1019,7 +1021,17 @@ export default function App() {
                         </span>
 
                       </td>
+<td className="px-6 py-5">
 
+  <span
+    className={`px-4 py-2 rounded-full text-sm font-semibold ${stage.color}`}
+  >
+
+    {stage.label}
+
+  </span>
+
+</td>
                       <td className="px-6 py-5">
 
                         <div className="max-w-[200px]">
