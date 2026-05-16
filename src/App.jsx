@@ -608,6 +608,26 @@ const [selectedFile, setSelectedFile] =
               }
               className="w-full px-4 py-3 rounded-2xl border border-slate-200"
             />
+            <div className="space-y-2">
+
+  <label className="text-sm font-medium text-slate-600">
+
+    Upload hồ sơ PDF
+
+  </label>
+
+  <input
+    type="file"
+    accept=".pdf"
+    onChange={(e) =>
+      setSelectedFile(
+        e.target.files[0]
+      )
+    }
+    className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white"
+  />
+
+</div>
 <div className="space-y-2">
 
   <label className="text-sm font-medium text-slate-600">
