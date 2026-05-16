@@ -41,7 +41,8 @@ export default function App() {
     useState({
       bank: '',
       fileType: '',
-      amount: ''
+      amount: '',
+      submissionDate: ''
     })
 
   useEffect(() => {
@@ -56,7 +57,7 @@ export default function App() {
       await supabase
         .from('applications')
         .select()
-        .order('id', {
+        .order('submission_date', {
           ascending: false
         })
 
@@ -97,6 +98,43 @@ export default function App() {
     setSelectedTimeline(data || [])
 
     setShowTimeline(true)
+  }
+
+  function calculateAging(date) {
+
+    if (!date) return 0
+
+    const today =
+      new Date()
+
+    const submissionDate =
+      new Date(date)
+
+    const diffTime =
+      today - submissionDate
+
+    const diffDays =
+      Math.floor(
+        diffTime /
+        (1000 * 60 * 60 * 24)
+      )
+
+    return diffDays
+  }
+
+  function getAgingColor(days) {
+
+    if (days > 14) {
+
+      return 'bg-red-100 text-red-700'
+    }
+
+    if (days > 7) {
+
+      return 'bg-amber-100 text-amber-700'
+    }
+
+    return 'bg-green-100 text-green-700'
   }
 
   async function addApplication() {
@@ -160,6 +198,9 @@ export default function App() {
             amount:
               newApplication.amount,
 
+            submission_date:
+              newApplication.submissionDate,
+
             progress: 10,
 
             status:
@@ -186,7 +227,8 @@ export default function App() {
       setNewApplication({
         bank: '',
         fileType: '',
-        amount: ''
+        amount: '',
+        submissionDate: ''
       })
 
       setSelectedFile(null)
@@ -340,6 +382,17 @@ export default function App() {
 
     }).length
 
+  const overdueCount =
+    applications.filter(item => {
+
+      return (
+        calculateAging(
+          item.submission_date
+        ) > 7
+      )
+
+    }).length
+
   const totalAmount =
     applications.reduce(
       (sum, item) => {
@@ -460,7 +513,7 @@ export default function App() {
 
         {/* KPI */}
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-5">
 
           <div className="bg-white rounded-3xl p-6 shadow-sm">
 
@@ -501,6 +554,18 @@ export default function App() {
           <div className="bg-white rounded-3xl p-6 shadow-sm">
 
             <p className="text-slate-500 text-sm">
+              Hồ sơ overdue
+            </p>
+
+            <h2 className="text-4xl font-bold mt-3 text-red-600">
+              {overdueCount}
+            </h2>
+
+          </div>
+
+          <div className="bg-white rounded-3xl p-6 shadow-sm">
+
+            <p className="text-slate-500 text-sm">
               Tổng pipeline
             </p>
 
@@ -515,8 +580,6 @@ export default function App() {
         {/* EXECUTIVE DASHBOARD */}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-          {/* PIE CHART */}
 
           <div className="bg-white rounded-3xl p-6 shadow-sm">
 
@@ -570,8 +633,6 @@ export default function App() {
             </div>
 
           </div>
-
-          {/* BAR CHART */}
 
           <div className="bg-white rounded-3xl p-6 shadow-sm">
 
@@ -657,6 +718,14 @@ export default function App() {
                   </th>
 
                   <th className="text-left px-6 py-4">
+                    Ngày gửi
+                  </th>
+
+                  <th className="text-left px-6 py-4">
+                    Aging
+                  </th>
+
+                  <th className="text-left px-6 py-4">
                     PDF
                   </th>
 
@@ -682,146 +751,176 @@ export default function App() {
 
               <tbody>
 
-                {filteredApplications.map(item => (
+                {filteredApplications.map(item => {
 
-                  <tr
-                    key={item.id}
-                    className="border-t border-slate-100 hover:bg-slate-50"
-                  >
+                  const aging =
+                    calculateAging(
+                      item.submission_date
+                    )
 
-                    <td className="px-6 py-5 font-semibold">
-                      {item.bank}
-                    </td>
+                  return (
 
-                    <td className="px-6 py-5">
-                      {item.file_type}
-                    </td>
+                    <tr
+                      key={item.id}
+                      className="border-t border-slate-100 hover:bg-slate-50"
+                    >
 
-                    <td className="px-6 py-5">
-                      {item.amount}
-                    </td>
+                      <td className="px-6 py-5 font-semibold">
+                        {item.bank}
+                      </td>
 
-                    <td className="px-6 py-5">
+                      <td className="px-6 py-5">
+                        {item.file_type}
+                      </td>
 
-                      {item.document_url ? (
+                      <td className="px-6 py-5">
+                        {item.amount}
+                      </td>
 
-                        <a
-                          href={item.document_url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-blue-600 underline"
+                      <td className="px-6 py-5">
+
+                        {item.submission_date
+                          ? new Date(
+                              item.submission_date
+                            ).toLocaleDateString()
+                          : '-'}
+
+                      </td>
+
+                      <td className="px-6 py-5">
+
+                        <span
+                          className={`px-3 py-2 rounded-full text-sm font-semibold ${getAgingColor(aging)}`}
                         >
-                          📄 {item.document_name}
-                        </a>
 
-                      ) : (
+                          {aging} ngày
 
-                        <span className="text-slate-400">
-                          Không có file
                         </span>
 
-                      )}
+                      </td>
 
-                    </td>
+                      <td className="px-6 py-5">
 
-                    <td className="px-6 py-5 min-w-[240px]">
+                        {item.document_url ? (
 
-                      <div className="space-y-3">
+                          <a
+                            href={item.document_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-blue-600 underline"
+                          >
+                            📄 {item.document_name}
+                          </a>
 
-                        <div className="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                        ) : (
 
-                          <div
-                            className="bg-slate-800 h-full"
-                            style={{
-                              width: `${item.progress || 0}%`
-                            }}
+                          <span className="text-slate-400">
+                            Không có file
+                          </span>
+
+                        )}
+
+                      </td>
+
+                      <td className="px-6 py-5 min-w-[240px]">
+
+                        <div className="space-y-3">
+
+                          <div className="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+
+                            <div
+                              className="bg-slate-800 h-full"
+                              style={{
+                                width: `${item.progress || 0}%`
+                              }}
+                            />
+
+                          </div>
+
+                          <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={item.progress || 0}
+                            onChange={(e) =>
+                              updateProgress(
+                                item.id,
+                                e.target.value
+                              )
+                            }
+                            className="w-full"
                           />
 
                         </div>
 
-                        <input
-                          type="range"
-                          min="0"
-                          max="100"
-                          value={item.progress || 0}
+                      </td>
+
+                      <td className="px-6 py-5">
+
+                        <select
+                          value={
+                            item.status ||
+                            'Đã tiếp nhận'
+                          }
                           onChange={(e) =>
-                            updateProgress(
+                            updateStatus(
                               item.id,
                               e.target.value
                             )
                           }
-                          className="w-full"
-                        />
+                          className={`px-4 py-2 rounded-full border-0 ${getStatusColor(item.status)}`}
+                        >
 
-                      </div>
+                          <option>
+                            Đã tiếp nhận
+                          </option>
 
-                    </td>
+                          <option>
+                            Đang thẩm định
+                          </option>
 
-                    <td className="px-6 py-5">
+                          <option>
+                            Chờ bổ sung
+                          </option>
 
-                      <select
-                        value={
-                          item.status ||
-                          'Đã tiếp nhận'
-                        }
-                        onChange={(e) =>
-                          updateStatus(
-                            item.id,
-                            e.target.value
-                          )
-                        }
-                        className={`px-4 py-2 rounded-full border-0 ${getStatusColor(item.status)}`}
-                      >
+                          <option>
+                            Hoàn thành
+                          </option>
 
-                        <option>
-                          Đã tiếp nhận
-                        </option>
+                        </select>
 
-                        <option>
-                          Đang thẩm định
-                        </option>
+                      </td>
 
-                        <option>
-                          Chờ bổ sung
-                        </option>
+                      <td className="px-6 py-5">
 
-                        <option>
-                          Hoàn thành
-                        </option>
+                        <button
+                          onClick={() =>
+                            fetchTimeline(item.id)
+                          }
+                          className="bg-indigo-500 text-white px-4 py-2 rounded-xl hover:bg-indigo-600"
+                        >
+                          Xem
+                        </button>
 
-                      </select>
+                      </td>
 
-                    </td>
+                      <td className="px-6 py-5">
 
-                    <td className="px-6 py-5">
+                        <button
+                          onClick={() =>
+                            deleteApplication(item.id)
+                          }
+                          className="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600"
+                        >
+                          Xóa
+                        </button>
 
-                      <button
-                        onClick={() =>
-                          fetchTimeline(item.id)
-                        }
-                        className="bg-indigo-500 text-white px-4 py-2 rounded-xl hover:bg-indigo-600"
-                      >
-                        Xem
-                      </button>
+                      </td>
 
-                    </td>
+                    </tr>
 
-                    <td className="px-6 py-5">
-
-                      <button
-                        onClick={() =>
-                          deleteApplication(item.id)
-                        }
-                        className="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600"
-                      >
-                        Xóa
-                      </button>
-
-                    </td>
-
-                  </tr>
-
-                ))}
+                  )
+                })}
 
               </tbody>
 
@@ -883,6 +982,31 @@ export default function App() {
               }
               className="w-full px-4 py-3 rounded-2xl border border-slate-200"
             />
+
+            <div className="space-y-2">
+
+              <label className="text-sm font-medium text-slate-600">
+
+                Ngày gửi hồ sơ ngân hàng
+
+              </label>
+
+              <input
+                type="date"
+                value={
+                  newApplication.submissionDate
+                }
+                onChange={(e) =>
+                  setNewApplication({
+                    ...newApplication,
+                    submissionDate:
+                      e.target.value
+                  })
+                }
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200"
+              />
+
+            </div>
 
             <div className="space-y-2">
 
