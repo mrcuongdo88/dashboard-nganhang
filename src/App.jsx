@@ -28,30 +28,32 @@ const bankDirectory = [
     name: 'ACB',
 
     logo:
-      'https://logo.clearbit.com/acb.com.vn'
+      'https://upload.wikimedia.org/wikipedia/commons/9/91/Logo_ACB.png'
   },
 
   {
     keywords: [
       'mb',
-      'mbbank'
+      'mbbank',
+      'military bank'
     ],
 
     name: 'MBBank',
 
     logo:
-      'https://logo.clearbit.com/mbbank.com.vn'
+      'https://upload.wikimedia.org/wikipedia/commons/2/25/Logo_MB_new.png'
   },
 
   {
     keywords: [
-      'msb'
+      'msb',
+      'maritime'
     ],
 
     name: 'MSB',
 
     logo:
-      'https://logo.clearbit.com/msb.com.vn'
+      'https://upload.wikimedia.org/wikipedia/commons/5/5f/MSB_Logo.png'
   },
 
   {
@@ -62,19 +64,19 @@ const bankDirectory = [
     name: 'SHB',
 
     logo:
-      'https://logo.clearbit.com/shb.com.vn'
+      'https://upload.wikimedia.org/wikipedia/commons/e/e7/Logo_SHB.svg'
   },
 
   {
     keywords: [
-      'vietcombank',
-      'vcb'
+      'vcb',
+      'vietcombank'
     ],
 
     name: 'Vietcombank',
 
     logo:
-      'https://logo.clearbit.com/vietcombank.com.vn'
+      'https://upload.wikimedia.org/wikipedia/commons/6/68/Logo_Vietcombank.png'
   },
 
   {
@@ -85,7 +87,7 @@ const bankDirectory = [
     name: 'BIDV',
 
     logo:
-      'https://logo.clearbit.com/bidv.com.vn'
+      'https://upload.wikimedia.org/wikipedia/commons/1/18/Logo_BIDV.png'
   },
 
   {
@@ -97,7 +99,7 @@ const bankDirectory = [
     name: 'Techcombank',
 
     logo:
-      'https://logo.clearbit.com/techcombank.com.vn'
+      'https://upload.wikimedia.org/wikipedia/commons/5/5e/Techcombank_logo.png'
   }
 ]
 
@@ -247,20 +249,6 @@ export default function App() {
     fetchTimeline(
       selectedApplicationId
     )
-  }
-
-  async function deleteApplication(id) {
-
-    const { error } =
-      await supabase
-        .from('applications')
-        .delete()
-        .eq('id', Number(id))
-
-    if (!error) {
-
-      fetchApplications()
-    }
   }
 
   function calculateAging(date) {
@@ -428,6 +416,20 @@ export default function App() {
       setSelectedFile(null)
 
       setShowModal(false)
+    }
+  }
+
+  async function deleteApplication(id) {
+
+    const { error } =
+      await supabase
+        .from('applications')
+        .delete()
+        .eq('id', Number(id))
+
+    if (!error) {
+
+      fetchApplications()
     }
   }
 
@@ -670,8 +672,6 @@ export default function App() {
 
       <div className="max-w-7xl mx-auto space-y-6">
 
-        {/* HEADER */}
-
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
           <div>
@@ -708,11 +708,10 @@ export default function App() {
 
         </div>
 
-        {/* KPI */}
-
         <div className="grid grid-cols-1 md:grid-cols-6 gap-5">
 
           <div className="bg-white rounded-3xl p-6 shadow-sm">
+
             <p className="text-slate-500 text-sm">
               Tổng hồ sơ
             </p>
@@ -720,9 +719,11 @@ export default function App() {
             <h2 className="text-4xl font-bold mt-3 text-slate-800">
               {applications.length}
             </h2>
+
           </div>
 
           <div className="bg-white rounded-3xl p-6 shadow-sm">
+
             <p className="text-slate-500 text-sm">
               Đang xử lý
             </p>
@@ -730,9 +731,11 @@ export default function App() {
             <h2 className="text-4xl font-bold mt-3 text-slate-800">
               {processingCount}
             </h2>
+
           </div>
 
           <div className="bg-white rounded-3xl p-6 shadow-sm">
+
             <p className="text-slate-500 text-sm">
               Hoàn thành
             </p>
@@ -740,9 +743,11 @@ export default function App() {
             <h2 className="text-4xl font-bold mt-3 text-slate-800">
               {completedCount}
             </h2>
+
           </div>
 
           <div className="bg-white rounded-3xl p-6 shadow-sm">
+
             <p className="text-slate-500 text-sm">
               Hồ sơ overdue
             </p>
@@ -750,9 +755,11 @@ export default function App() {
             <h2 className="text-4xl font-bold mt-3 text-red-600">
               {overdueCount}
             </h2>
+
           </div>
 
           <div className="bg-white rounded-3xl p-6 shadow-sm">
+
             <p className="text-slate-500 text-sm">
               Follow-up overdue
             </p>
@@ -760,9 +767,11 @@ export default function App() {
             <h2 className="text-4xl font-bold mt-3 text-amber-600">
               {followupOverdueCount}
             </h2>
+
           </div>
 
           <div className="bg-white rounded-3xl p-6 shadow-sm">
+
             <p className="text-slate-500 text-sm">
               Tổng pipeline
             </p>
@@ -770,17 +779,16 @@ export default function App() {
             <h2 className="text-xl font-bold mt-3 text-slate-800">
               {formatCurrency(totalAmount)} VNĐ
             </h2>
+
           </div>
 
         </div>
-
-        {/* EXECUTIVE DASHBOARD */}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
           <div className="bg-white rounded-3xl p-6 shadow-sm">
 
-            <h2 className="text-xl font-bold mb-6">
+            <h2 className="text-xl font-bold text-slate-800 mb-6">
               Trạng thái hồ sơ
             </h2>
 
@@ -831,7 +839,7 @@ export default function App() {
 
           <div className="bg-white rounded-3xl p-6 shadow-sm">
 
-            <h2 className="text-xl font-bold mb-6">
+            <h2 className="text-xl font-bold text-slate-800 mb-6">
               Tiến độ theo ngân hàng
             </h2>
 
@@ -870,7 +878,524 @@ export default function App() {
 
         </div>
 
+        <div className="bg-white rounded-3xl p-6 shadow-sm">
+
+          <input
+            type="text"
+            placeholder="Tìm kiếm ngân hàng..."
+            value={search}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+            className="w-full px-4 py-3 rounded-2xl border border-slate-200"
+          />
+
+        </div>
+
+        <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
+
+          <div className="overflow-x-auto">
+
+            <table className="w-full">
+
+              <thead className="bg-slate-50 text-slate-500 text-sm uppercase">
+
+                <tr>
+
+                  <th className="text-left px-6 py-4">
+                    Ngân hàng
+                  </th>
+
+                  <th className="text-left px-6 py-4">
+                    Hồ sơ
+                  </th>
+
+                  <th className="text-left px-6 py-4">
+                    Giá trị
+                  </th>
+
+                  <th className="text-left px-6 py-4">
+                    Ngày gửi
+                  </th>
+
+                  <th className="text-left px-6 py-4">
+                    Aging
+                  </th>
+
+                  <th className="text-left px-6 py-4">
+                    Next Action
+                  </th>
+
+                  <th className="text-left px-6 py-4">
+                    Follow-up
+                  </th>
+
+                  <th className="text-left px-6 py-4">
+                    PDF
+                  </th>
+
+                  <th className="text-left px-6 py-4">
+                    Timeline
+                  </th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                {filteredApplications.map(item => {
+
+                  const aging =
+                    calculateAging(
+                      item.submission_date
+                    )
+
+                  const bankInfo =
+                    detectBank(
+                      item.bank
+                    )
+
+                  return (
+
+                    <tr
+                      key={item.id}
+                      className="border-t border-slate-100 hover:bg-slate-50"
+                    >
+
+                      <td className="px-6 py-5">
+
+                        <div className="flex items-center gap-3">
+
+                          {bankInfo?.logo && (
+
+                            <img
+                              src={
+                                bankInfo.logo
+                              }
+                              alt={item.bank}
+                              className="h-10 w-auto object-contain"
+                            />
+
+                          )}
+
+                          <div>
+
+                            <p className="font-semibold text-slate-800">
+                              {bankInfo?.name ||
+                                item.bank}
+                            </p>
+
+                            <p className="text-xs text-slate-400">
+                              Banking Partner
+                            </p>
+
+                          </div>
+
+                        </div>
+
+                      </td>
+
+                      <td className="px-6 py-5">
+                        {item.file_type}
+                      </td>
+
+                      <td className="px-6 py-5 font-semibold text-slate-800">
+                        {formatCurrency(item.amount)}
+                      </td>
+
+                      <td className="px-6 py-5">
+
+                        {item.submission_date
+                          ? new Date(
+                              item.submission_date
+                            ).toLocaleDateString()
+                          : '-'}
+
+                      </td>
+
+                      <td className="px-6 py-5">
+
+                        <span
+                          className={`px-3 py-2 rounded-full text-sm font-semibold ${getAgingColor(aging)}`}
+                        >
+                          {aging} ngày
+                        </span>
+
+                      </td>
+
+                      <td className="px-6 py-5">
+
+                        <div className="max-w-[200px]">
+
+                          <p className="font-medium text-slate-700">
+                            {item.next_action ||
+                              '-'}
+                          </p>
+
+                        </div>
+
+                      </td>
+
+                      <td className="px-6 py-5">
+
+                        {item.next_followup_date ? (
+
+                          <span
+                            className={`px-3 py-2 rounded-full text-sm font-semibold ${
+                              isFollowupOverdue(
+                                item.next_followup_date
+                              )
+                                ? 'bg-red-100 text-red-700'
+                                : 'bg-green-100 text-green-700'
+                            }`}
+                          >
+
+                            {new Date(
+                              item.next_followup_date
+                            ).toLocaleDateString()}
+
+                          </span>
+
+                        ) : (
+
+                          '-'
+
+                        )}
+
+                      </td>
+
+                      <td className="px-6 py-5">
+
+                        {item.document_url ? (
+
+                          <a
+                            href={item.document_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-blue-600 underline"
+                          >
+                            📄 {item.document_name}
+                          </a>
+
+                        ) : (
+
+                          <span className="text-slate-400">
+                            Không có file
+                          </span>
+
+                        )}
+
+                      </td>
+
+                      <td className="px-6 py-5">
+
+                        <button
+                          onClick={() =>
+                            fetchTimeline(item.id)
+                          }
+                          className="bg-indigo-500 text-white px-4 py-2 rounded-xl hover:bg-indigo-600"
+                        >
+                          Xem
+                        </button>
+
+                      </td>
+
+                    </tr>
+
+                  )
+                })}
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
       </div>
+
+      {showModal && (
+
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+
+          <div className="bg-white rounded-3xl p-6 w-full max-w-md space-y-4 shadow-2xl">
+
+            <h2 className="text-2xl font-bold text-slate-800">
+              Thêm hồ sơ mới
+            </h2>
+
+            <div className="space-y-2">
+
+              <input
+                type="text"
+                placeholder="Tên ngân hàng"
+                value={newApplication.bank}
+                onChange={(e) =>
+                  setNewApplication({
+                    ...newApplication,
+                    bank: e.target.value
+                  })
+                }
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200"
+              />
+
+              {newApplication.bank && (
+
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden">
+
+                  {bankSuggestions.map(
+                    bank => (
+
+                      <button
+                        key={bank.name}
+                        type="button"
+                        onClick={() =>
+                          setNewApplication({
+                            ...newApplication,
+                            bank: bank.name
+                          })
+                        }
+                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-100 text-left"
+                      >
+
+                        <img
+                          src={bank.logo}
+                          alt={bank.name}
+                          className="h-8 w-auto object-contain"
+                        />
+
+                        <span className="font-medium">
+                          {bank.name}
+                        </span>
+
+                      </button>
+
+                    )
+                  )}
+
+                </div>
+
+              )}
+
+            </div>
+
+            <input
+              type="text"
+              placeholder="Loại hồ sơ"
+              value={newApplication.fileType}
+              onChange={(e) =>
+                setNewApplication({
+                  ...newApplication,
+                  fileType: e.target.value
+                })
+              }
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200"
+            />
+
+            <input
+              type="text"
+              placeholder="Giá trị khoản vay"
+              value={newApplication.amount}
+              onChange={(e) =>
+                setNewApplication({
+                  ...newApplication,
+                  amount:
+                    formatInputCurrency(
+                      e.target.value
+                    )
+                })
+              }
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200"
+            />
+
+            <input
+              type="text"
+              placeholder="Next Action"
+              value={newApplication.nextAction}
+              onChange={(e) =>
+                setNewApplication({
+                  ...newApplication,
+                  nextAction:
+                    e.target.value
+                })
+              }
+              className="w-full px-4 py-3 rounded-2xl border border-slate-200"
+            />
+
+            <div className="space-y-2">
+
+              <label className="text-sm font-medium text-slate-600">
+                Ngày follow-up tiếp theo
+              </label>
+
+              <input
+                type="date"
+                value={
+                  newApplication.nextFollowupDate
+                }
+                onChange={(e) =>
+                  setNewApplication({
+                    ...newApplication,
+                    nextFollowupDate:
+                      e.target.value
+                  })
+                }
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200"
+              />
+
+            </div>
+
+            <div className="space-y-2">
+
+              <label className="text-sm font-medium text-slate-600">
+                Ngày gửi hồ sơ ngân hàng
+              </label>
+
+              <input
+                type="date"
+                value={
+                  newApplication.submissionDate
+                }
+                onChange={(e) =>
+                  setNewApplication({
+                    ...newApplication,
+                    submissionDate:
+                      e.target.value
+                  })
+                }
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200"
+              />
+
+            </div>
+
+            <div className="space-y-2">
+
+              <label className="text-sm font-medium text-slate-600">
+                Upload hồ sơ PDF
+              </label>
+
+              <input
+                type="file"
+                accept=".pdf"
+                onChange={(e) =>
+                  setSelectedFile(
+                    e.target.files[0]
+                  )
+                }
+                className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white"
+              />
+
+            </div>
+
+            <div className="flex justify-end gap-3 pt-3">
+
+              <button
+                onClick={() =>
+                  setShowModal(false)
+                }
+                className="px-5 py-3 rounded-2xl bg-slate-200"
+              >
+                Hủy
+              </button>
+
+              <button
+                onClick={addApplication}
+                className="px-5 py-3 rounded-2xl bg-slate-800 text-white"
+              >
+                Lưu hồ sơ
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
+
+      {showTimeline && (
+
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
+
+          <div className="bg-white rounded-3xl p-6 w-full max-w-2xl shadow-2xl">
+
+            <div className="flex items-center justify-between mb-6">
+
+              <h2 className="text-2xl font-bold">
+                CRM Follow-up Timeline
+              </h2>
+
+              <button
+                onClick={() =>
+                  setShowTimeline(false)
+                }
+                className="bg-slate-200 px-4 py-2 rounded-xl"
+              >
+                Đóng
+              </button>
+
+            </div>
+
+            <div className="bg-slate-50 p-4 rounded-2xl mb-6 space-y-3">
+
+              <textarea
+                placeholder="Nhập follow-up / ghi chú / trao đổi với ngân hàng..."
+                value={timelineNote}
+                onChange={(e) =>
+                  setTimelineNote(
+                    e.target.value
+                  )
+                }
+                className="w-full border border-slate-200 rounded-2xl p-4 min-h-[100px]"
+              />
+
+              <div className="flex justify-end">
+
+                <button
+                  onClick={addNote}
+                  className="bg-slate-800 text-white px-5 py-3 rounded-2xl"
+                >
+                  + Thêm ghi chú
+                </button>
+
+              </div>
+
+            </div>
+
+            <div className="space-y-4 max-h-[500px] overflow-y-auto">
+
+              {selectedTimeline.map(item => (
+
+                <div
+                  key={item.id}
+                  className="border-l-4 border-slate-800 bg-slate-50 p-4 rounded-xl"
+                >
+
+                  <p className="font-semibold text-slate-800 whitespace-pre-wrap">
+                    {item.action}
+                  </p>
+
+                  <p className="text-sm text-slate-500 mt-2">
+
+                    {new Date(
+                      item.created_at
+                    ).toLocaleString()}
+
+                  </p>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
 
     </div>
   )
