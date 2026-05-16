@@ -37,7 +37,11 @@ export default function App() {
           ascending: false
         })
 
-    if (!error) {
+    if (error) {
+
+      console.log(error)
+
+    } else {
 
       setApplications(data || [])
     }
@@ -87,48 +91,36 @@ export default function App() {
 
   async function deleteApplication(id) {
 
-    const { error } =
-      await supabase
-        .from('applications')
-        .delete()
-        .eq('id', id)
+    await supabase
+      .from('applications')
+      .delete()
+      .eq('id', id)
 
-    if (!error) {
-
-      fetchApplications()
-    }
+    fetchApplications()
   }
 
   async function updateProgress(id, value) {
 
-    const { error } =
-      await supabase
-        .from('applications')
-        .update({
-          progress: Number(value)
-        })
-        .eq('id', id)
+    await supabase
+      .from('applications')
+      .update({
+        progress: Number(value)
+      })
+      .eq('id', id)
 
-    if (!error) {
-
-      fetchApplications()
-    }
+    fetchApplications()
   }
 
   async function updateStatus(id, value) {
 
-    const { error } =
-      await supabase
-        .from('applications')
-        .update({
-          status: value
-        })
-        .eq('id', id)
+    await supabase
+      .from('applications')
+      .update({
+        status: value
+      })
+      .eq('id', id)
 
-    if (!error) {
-
-      fetchApplications()
-    }
+    fetchApplications()
   }
 
   function exportToExcel() {
@@ -193,14 +185,35 @@ export default function App() {
   const filteredApplications =
     applications.filter(item => {
 
-      if (!search) return true
+      const bank =
+        item.bank || ''
 
-      return item.bank
-        ?.toLowerCase()
+      return bank
+        .toLowerCase()
         .includes(
           search.toLowerCase()
         )
     })
+
+  const processingCount =
+    applications.filter(item => {
+
+      const progress =
+        item.progress || 0
+
+      return progress < 100
+
+    }).length
+
+  const completedCount =
+    applications.filter(item => {
+
+      const progress =
+        item.progress || 0
+
+      return progress === 100
+
+    }).length
 
   return (
 
@@ -269,13 +282,7 @@ export default function App() {
             </p>
 
             <h2 className="text-4xl font-bold mt-3 text-slate-800">
-
-              {
-                applications.filter(
-                  item => item.progress < 100
-                ).length
-              }
-
+              {processingCount}
             </h2>
 
           </div>
@@ -287,13 +294,7 @@ export default function App() {
             </p>
 
             <h2 className="text-4xl font-bold mt-3 text-slate-800">
-
-              {
-                applications.filter(
-                  item => item.progress === 100
-                ).length
-              }
-
+              {completedCount}
             </h2>
 
           </div>
@@ -349,7 +350,7 @@ export default function App() {
                   </th>
 
                   <th className="text-left px-6 py-4">
-                    Hành động
+                    Action
                   </th>
 
                 </tr>
@@ -386,7 +387,7 @@ export default function App() {
                           <div
                             className="bg-slate-800 h-full"
                             style={{
-                              width: `${item.progress}%`
+                              width: `${item.progress || 0}%`
                             }}
                           />
 
@@ -396,7 +397,7 @@ export default function App() {
                           type="range"
                           min="0"
                           max="100"
-                          value={item.progress}
+                          value={item.progress || 0}
                           onChange={(e) =>
                             updateProgress(
                               item.id,
@@ -413,7 +414,10 @@ export default function App() {
                     <td className="px-6 py-5">
 
                       <select
-                        value={item.status}
+                        value={
+                          item.status ||
+                          'Đã tiếp nhận'
+                        }
                         onChange={(e) =>
                           updateStatus(
                             item.id,
