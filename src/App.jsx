@@ -91,7 +91,7 @@ export default function App() {
     await supabase
       .from('applications')
       .delete()
-      .eq('id', id)
+      .eq('id', Number(id))
 
   if (error) {
 
@@ -111,7 +111,7 @@ export default function App() {
       .update({
         progress: parseInt(value)
       })
-      .eq('id', id)
+      .eq('id', Number(id))
 
   if (error) {
 
@@ -131,7 +131,7 @@ export default function App() {
       .update({
         status: value
       })
-      .eq('id', id)
+      .eq('id', Number(id))
 
   if (error) {
 
@@ -382,7 +382,7 @@ export default function App() {
                 {filteredApplications.map(item => (
 
                   <tr
-                    key={item.id}
+                    key={String(item.id)}
                     className="border-t border-slate-100 hover:bg-slate-50"
                   >
 
