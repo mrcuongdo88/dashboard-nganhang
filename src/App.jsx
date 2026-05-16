@@ -29,23 +29,19 @@ export default function App() {
 
   async function fetchApplications() {
 
-    const { data, error } =
-      await supabase
-        .from('applications')
-        .select()
-        .order('id', {
-          ascending: false
-        })
+  const { data, error } =
+    await supabase
+      .from('applications')
+      .select()
 
-    if (error) {
+  console.log('DATA:', data)
+  console.log('ERROR:', error)
 
-      console.log(error)
+  if (data) {
 
-    } else {
-
-      setApplications(data || [])
-    }
+    setApplications(data)
   }
+}
 
   async function addApplication() {
 
