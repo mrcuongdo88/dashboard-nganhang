@@ -20,52 +20,84 @@ import {
 const bankDirectory = [
 
   {
-    keywords: ['acb'],
+    keywords: [
+      'acb',
+      'asia commercial'
+    ],
+
     name: 'ACB',
+
     logo:
-      'https://www.acb.com.vn/wps/wcm/connect/f6c6d5f7-5c18-4a7d-b6e8-95d3e5a793b3/logo-acb.png'
+      'https://logo.clearbit.com/acb.com.vn'
   },
 
   {
-    keywords: ['mb', 'mbbank'],
+    keywords: [
+      'mb',
+      'mbbank'
+    ],
+
     name: 'MBBank',
+
     logo:
-      'https://upload.wikimedia.org/wikipedia/commons/2/25/Logo_MB_new.png'
+      'https://logo.clearbit.com/mbbank.com.vn'
   },
 
   {
-    keywords: ['msb'],
+    keywords: [
+      'msb'
+    ],
+
     name: 'MSB',
+
     logo:
-      'https://www.msb.com.vn/assets/images/logo.png'
+      'https://logo.clearbit.com/msb.com.vn'
   },
 
   {
-    keywords: ['shb'],
+    keywords: [
+      'shb'
+    ],
+
     name: 'SHB',
+
     logo:
-      'https://www.shb.com.vn/wp-content/uploads/2022/09/logo-shb.png'
+      'https://logo.clearbit.com/shb.com.vn'
   },
 
   {
-    keywords: ['vietcombank', 'vcb'],
+    keywords: [
+      'vietcombank',
+      'vcb'
+    ],
+
     name: 'Vietcombank',
+
     logo:
-      'https://portal.vietcombank.com.vn/PublishingImages/logo.png'
+      'https://logo.clearbit.com/vietcombank.com.vn'
   },
 
   {
-    keywords: ['bidv'],
+    keywords: [
+      'bidv'
+    ],
+
     name: 'BIDV',
+
     logo:
-      'https://bidv.com.vn/wps/wcm/connect/bidv/7dcb8e5f/logo-bidv.png'
+      'https://logo.clearbit.com/bidv.com.vn'
   },
 
   {
-    keywords: ['techcombank', 'tcb'],
+    keywords: [
+      'techcombank',
+      'tcb'
+    ],
+
     name: 'Techcombank',
+
     logo:
-      'https://www.techcombank.com.vn/file-source/logo-techcombank.png'
+      'https://logo.clearbit.com/techcombank.com.vn'
   }
 ]
 
@@ -638,6 +670,8 @@ export default function App() {
 
       <div className="max-w-7xl mx-auto space-y-6">
 
+        {/* HEADER */}
+
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
           <div>
@@ -673,6 +707,8 @@ export default function App() {
           </div>
 
         </div>
+
+        {/* KPI */}
 
         <div className="grid grid-cols-1 md:grid-cols-6 gap-5">
 
@@ -734,6 +770,102 @@ export default function App() {
             <h2 className="text-xl font-bold mt-3 text-slate-800">
               {formatCurrency(totalAmount)} VNĐ
             </h2>
+          </div>
+
+        </div>
+
+        {/* EXECUTIVE DASHBOARD */}
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          <div className="bg-white rounded-3xl p-6 shadow-sm">
+
+            <h2 className="text-xl font-bold mb-6">
+              Trạng thái hồ sơ
+            </h2>
+
+            <div className="h-[320px]">
+
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+              >
+
+                <PieChart>
+
+                  <Pie
+                    data={statusData}
+                    dataKey="value"
+                    nameKey="name"
+                    outerRadius={110}
+                    label
+                  >
+
+                    {statusData.map(
+                      (entry, index) => (
+
+                        <Cell
+                          key={index}
+                          fill={
+                            COLORS[
+                              index %
+                              COLORS.length
+                            ]
+                          }
+                        />
+
+                      )
+                    )}
+
+                  </Pie>
+
+                  <Tooltip />
+
+                </PieChart>
+
+              </ResponsiveContainer>
+
+            </div>
+
+          </div>
+
+          <div className="bg-white rounded-3xl p-6 shadow-sm">
+
+            <h2 className="text-xl font-bold mb-6">
+              Tiến độ theo ngân hàng
+            </h2>
+
+            <div className="h-[320px]">
+
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+              >
+
+                <BarChart data={bankData}>
+
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                  />
+
+                  <XAxis dataKey="bank" />
+
+                  <YAxis />
+
+                  <Tooltip />
+
+                  <Bar
+                    dataKey="progress"
+                    fill="#0f172a"
+                    radius={[8, 8, 0, 0]}
+                  />
+
+                </BarChart>
+
+              </ResponsiveContainer>
+
+            </div>
+
           </div>
 
         </div>
