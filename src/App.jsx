@@ -477,7 +477,24 @@ export default function App() {
   }
 
   async function updateStatus(id, value) {
+async function updateNextAction(
+  id,
+  value
+) {
 
+  const { error } =
+    await supabase
+      .from('applications')
+      .update({
+        next_action: value
+      })
+      .eq('id', Number(id))
+
+  if (!error) {
+
+    fetchApplications()
+  }
+}
     const { error } =
       await supabase
         .from('applications')
@@ -1042,18 +1059,24 @@ export default function App() {
 
                       </td>
 
-                      <td className="px-6 py-5">
+                     <td className="px-6 py-5">
 
-                        <div className="max-w-[200px]">
+  <input
+    type="text"
+    value={
+      item.next_action || ''
+    }
+    onChange={(e) =>
+      updateNextAction(
+        item.id,
+        e.target.value
+      )
+    }
+    placeholder="Nhập next action..."
+    className="w-[220px] px-4 py-2 rounded-xl border border-slate-200 bg-white"
+  />
 
-                          <p className="font-medium text-slate-700">
-                            {item.next_action ||
-                              '-'}
-                          </p>
-
-                        </div>
-
-                      </td>
+</td>
 
                       <td className="px-6 py-5">
 
