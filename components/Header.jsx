@@ -26,3 +26,6 @@ export default function Header({ onOpenModal }) {
     </div>
   )
 }
+<th className="text-left px-6 py-4">
+  Hồ sơ PDF
+</th>

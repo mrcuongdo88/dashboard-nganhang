@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 import { supabase } from './lib/supabase'
+import { v4 as uuidv4 }
+from 'uuid'
 
 export default function App() {
 
@@ -20,7 +22,8 @@ export default function App() {
       fileType: '',
       amount: ''
     })
-
+const [selectedFile, setSelectedFile] =
+  useState(null)
   useEffect(() => {
 
     fetchApplications()
@@ -45,45 +48,91 @@ export default function App() {
 
   async function addApplication() {
 
-    if (
-      !newApplication.bank ||
-      !newApplication.fileType
-    ) return
+  if (
+    !newApplication.bank ||
+    !newApplication.fileType
+  ) return
 
-    const { error } =
-      await supabase
-        .from('applications')
-        .insert([
-          {
-            bank:
-              newApplication.bank,
+  let documentUrl = ''
+  let documentName = ''
 
-            file_type:
-              newApplication.fileType,
+  // upload pdf
 
-            amount:
-              newApplication.amount,
+  if (selectedFile) {
 
-            progress: 10,
+    const fileExt =
+      selectedFile.name.split('.').pop()
 
-            status:
-              'Đã tiếp nhận'
-          }
-        ])
+    const fileName =
+      `${uuidv4()}.${fileExt}`
 
-    if (!error) {
+    const { error: uploadError } =
+      await supabase.storage
+        .from('documents')
+        .upload(
+          fileName,
+          selectedFile
+        )
 
-      fetchApplications()
+    if (!uploadError) {
 
-      setNewApplication({
-        bank: '',
-        fileType: '',
-        amount: ''
-      })
+      const { data } =
+        supabase.storage
+          .from('documents')
+          .getPublicUrl(fileName)
 
-      setShowModal(false)
+      documentUrl =
+        data.publicUrl
+
+      documentName =
+        selectedFile.name
     }
   }
+
+  // insert database
+
+  const { error } =
+    await supabase
+      .from('applications')
+      .insert([
+        {
+          bank:
+            newApplication.bank,
+
+          file_type:
+            newApplication.fileType,
+
+          amount:
+            newApplication.amount,
+
+          progress: 10,
+
+          status:
+            'Đã tiếp nhận',
+
+          document_url:
+            documentUrl,
+
+          document_name:
+            documentName
+        }
+      ])
+
+  if (!error) {
+
+    fetchApplications()
+
+    setNewApplication({
+      bank: '',
+      fileType: '',
+      amount: ''
+    })
+
+    setSelectedFile(null)
+
+    setShowModal(false)
+  }
+}
 
   async function deleteApplication(id) {
 
@@ -353,7 +402,9 @@ export default function App() {
                   <th className="text-left px-6 py-4">
                     Giá trị
                   </th>
-
+<th className="text-left px-6 py-4">
+  Hồ sơ PDF
+</th>
                   <th className="text-left px-6 py-4">
                     Tiến độ
                   </th>
@@ -390,7 +441,27 @@ export default function App() {
                     <td className="px-6 py-5">
                       {item.amount}
                     </td>
+<td className="px-6 py-5">
 
+  {item.document_url ? (
+
+    <a
+      href={item.document_url}
+      target="_blank"
+      className="text-blue-600 underline"
+    >
+      📄 {item.document_name}
+    </a>
+
+  ) : (
+
+    <span className="text-slate-400">
+      Không có file
+    </span>
+
+  )}
+
+</td>
                     <td className="px-6 py-5 min-w-[240px]">
 
                       <div className="space-y-3">

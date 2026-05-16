@@ -86,9 +86,19 @@ export default function AddApplicationModal({
               amount: e.target.value
             })
           }
+          
           className="w-full px-4 py-3 rounded-2xl border border-slate-200"
         />
-
+<input
+  type="file"
+  accept=".pdf"
+  onChange={(e) =>
+    setSelectedFile(
+      e.target.files[0]
+    )
+  }
+  className="w-full px-4 py-3 rounded-2xl border border-slate-200"
+/>
         <div>
 
           <label className="block text-sm font-medium text-slate-600 mb-2">
