@@ -22,6 +22,8 @@ export default function App() {
       fileType: '',
       amount: ''
     })
+    const [selectedFile, setSelectedFile] =
+  useState(null)
 const [selectedFile, setSelectedFile] =
   useState(null)
   useEffect(() => {
@@ -608,7 +610,26 @@ const [selectedFile, setSelectedFile] =
               }
               className="w-full px-4 py-3 rounded-2xl border border-slate-200"
             />
+<div className="space-y-2">
 
+  <label className="text-sm font-medium text-slate-600">
+
+    Upload hồ sơ PDF
+
+  </label>
+
+  <input
+    type="file"
+    accept=".pdf"
+    onChange={(e) =>
+      setSelectedFile(
+        e.target.files[0]
+      )
+    }
+    className="w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white"
+  />
+
+</div>
             <div className="flex justify-end gap-3 pt-3">
 
               <button
