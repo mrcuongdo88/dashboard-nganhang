@@ -3,7 +3,15 @@ import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
 import { supabase } from './lib/supabase'
 import { v4 as uuidv4 } from 'uuid'
-
+import acbLogo from './assets/banks/acb.svg'
+import mbLogo from './assets/banks/mbb.png'
+import msbLogo from './assets/banks/msb.svg'
+import shbLogo from './assets/banks/shb.png'
+import vcbLogo from './assets/banks/vcb.png'
+import bidvLogo from './assets/banks/bidv.png'
+import techcomLogo from './assets/banks/tcb.svg'
+import abbankLogo from './assets/banks/abb.png'
+import gpbankLogo from './assets/banks/gpb.svg'
 import {
   PieChart,
   Pie,
@@ -28,7 +36,7 @@ const bankDirectory = [
     name: 'ACB',
 
     logo:
-      'https://acb.com.vn/_next/image?url=%2Fimages%2Flogo.svg&w=256&q=70'
+      acbLogo
   },
 
   {
@@ -41,7 +49,7 @@ const bankDirectory = [
     name: 'MBBank',
 
     logo:
-      'https://www.mbbank.com.vn/images/logo.png'
+      mbLogo
   },
 
   {
@@ -53,7 +61,7 @@ const bankDirectory = [
     name: 'MSB',
 
     logo:
-      'https://www.msb.com.vn/wp-content/themes/msb-website/assets/images/package_images/logo_white.svg'
+      msbLogo
   },
 
   {
@@ -64,7 +72,7 @@ const bankDirectory = [
     name: 'SHB',
 
     logo:
-      'https://www.shb.com.vn/wp-content/uploads/2016/03/Logo-SHB-VN.png'
+      shbLogo
   },
 
   {
@@ -76,7 +84,7 @@ const bankDirectory = [
     name: 'Vietcombank',
 
     logo:
-      'https://www.vietcombank.com.vn/-/media/Project/VCB-Sites/VCB/Home-page/VCB-Logo/Logo-VCB-no-60.png?ts=20240605031450'
+      vcbLogo
   },
 
   {
@@ -87,7 +95,7 @@ const bankDirectory = [
     name: 'BIDV',
 
     logo:
-      'https://bidv.com.vn/wps/wcm/connect/cc5c0724-338e-4cf5-bbe7-676f1f36fd7b/logopc.png?MOD=AJPERES&CACHEID=ROOTWORKSPACE-cc5c0724-338e-4cf5-bbe7-676f1f36fd7b-p5AGqf.&cache=none'
+      bidvLogo
   },
 
   {
@@ -99,7 +107,7 @@ const bankDirectory = [
     name: 'Techcombank',
 
     logo:
-      'https://techcombank.com/content/dam/techcombank/public-site/seo/techcombank_logo_svg_86201e50d1.svg'
+      techcomLogo
   },
   {
     keywords: [
@@ -110,7 +118,7 @@ const bankDirectory = [
     name: 'An Binh Bank',
 
     logo:
-      'https://abbank.vn/uploads/images/2026/02/01/logo-160x62-697e39f2c1aaa.png'
+      abbankLogo
   },
   {
     keywords: [
@@ -121,7 +129,7 @@ const bankDirectory = [
     name: 'GPBank',
 
     logo:
-      'https://www.gpbank.com.vn/-/media/logo/logo-final.svg'
+      gpbankLogo
   }
 ]
 
@@ -490,10 +498,25 @@ async function updateNextAction(
       })
       .eq('id', Number(id))
 
-  if (!error) {
+  if (error) {
 
-    fetchApplications()
+    console.log(error)
+
+    return
   }
+
+  setApplications(prev =>
+
+    prev.map(app =>
+
+      app.id === id
+        ? {
+            ...app,
+            next_action: value
+          }
+        : app
+    )
+  )
 }
     const { error } =
       await supabase
