@@ -155,7 +155,15 @@ const [
 ] = useState({})
   const [showTimeline, setShowTimeline] =
     useState(false)
+const [
+  selectedCase,
+  setSelectedCase
+] = useState(null)
 
+const [
+  showCaseDetail,
+  setShowCaseDetail
+] = useState(false)
   const [timelineNote, setTimelineNote] =
     useState('')
 
@@ -386,6 +394,14 @@ function getLatestTimeline(id) {
     return '-'
 
   return timelines[0].action
+}
+function openCaseDetail(item) {
+
+  setSelectedCase(item)
+
+  fetchTimeline(item.id)
+
+  setShowCaseDetail(true)
 }
   function formatInputCurrency(value) {
 
@@ -1076,9 +1092,19 @@ async function updateNextAction(
                   return (
 
                     <tr
-                      key={item.id}
-                      className="border-t border-slate-100 hover:bg-slate-50"
-                    >
+  key={item.id}
+
+  onClick={() =>
+    openCaseDetail(item)
+  }
+
+  className="
+    border-t
+    border-slate-100
+    hover:bg-slate-50
+    cursor-pointer
+  "
+>
 <td className="px-6 py-5">
 
   <div className="flex items-center justify-center">
@@ -1449,7 +1475,171 @@ async function updateNextAction(
         </div>
 
       )}
+{showCaseDetail && selectedCase && (
 
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-end z-50">
+
+    <div className="bg-white h-full w-full max-w-2xl p-6 overflow-y-auto shadow-2xl">
+
+      <div className="flex items-center justify-between mb-6">
+
+        <h2 className="text-3xl font-bold text-slate-800">
+          Case Detail
+        </h2>
+
+        <button
+          onClick={() =>
+            setShowCaseDetail(false)
+          }
+          className="bg-slate-200 px-4 py-2 rounded-xl"
+        >
+          Đóng
+        </button>
+
+      </div>
+
+      <div className="space-y-6">
+
+        <div className="bg-slate-50 rounded-3xl p-6">
+
+          <div className="flex items-center gap-4 mb-6">
+
+            {detectBank(selectedCase.bank)?.logo && (
+
+              <img
+                src={
+                  detectBank(selectedCase.bank).logo
+                }
+                alt={selectedCase.bank}
+                className="h-14 object-contain"
+              />
+
+            )}
+
+            <div>
+
+              <h3 className="text-2xl font-bold text-slate-800">
+                {selectedCase.bank}
+              </h3>
+
+              <p className="text-slate-500">
+                {selectedCase.file_type}
+              </p>
+
+            </div>
+
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+
+            <div className="bg-white rounded-2xl p-4">
+
+              <p className="text-slate-500 text-sm">
+                Giá trị khoản vay
+              </p>
+
+              <h3 className="text-xl font-bold text-slate-800 mt-2">
+                {formatCurrency(selectedCase.amount)} VNĐ
+              </h3>
+
+            </div>
+
+            <div className="bg-white rounded-2xl p-4">
+
+              <p className="text-slate-500 text-sm">
+                Aging
+              </p>
+
+              <h3 className="text-xl font-bold mt-2">
+
+                <span
+                  className={`px-3 py-2 rounded-full text-sm font-semibold ${getAgingColor(
+                    calculateAging(selectedCase.submission_date)
+                  )}`}
+                >
+
+                  {calculateAging(
+                    selectedCase.submission_date
+                  )} ngày
+
+                </span>
+
+              </h3>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div className="bg-slate-50 rounded-3xl p-6">
+
+          <h3 className="text-xl font-bold text-slate-800 mb-4">
+            Next Action
+          </h3>
+
+          <div className="bg-green-100 text-green-700 px-4 py-4 rounded-2xl font-semibold whitespace-pre-wrap">
+
+            {getLatestTimeline(selectedCase.id)}
+
+          </div>
+
+        </div>
+
+        <div className="bg-slate-50 rounded-3xl p-6">
+
+          <h3 className="text-xl font-bold text-slate-800 mb-4">
+            PDF Hồ sơ
+          </h3>
+
+          {selectedCase.document_url ? (
+
+            <div className="space-y-3">
+
+              <p className="text-slate-500">
+                {selectedCase.document_name}
+              </p>
+
+              <div className="flex gap-3">
+
+                <a
+                  href={selectedCase.document_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-slate-800 text-white px-5 py-3 rounded-2xl"
+                >
+                  👁 Xem PDF
+                </a>
+
+                <a
+                  href={selectedCase.document_url}
+                  download
+                  className="bg-slate-200 px-5 py-3 rounded-2xl"
+                >
+                  ⬇ Download
+                </a>
+
+              </div>
+
+            </div>
+
+          ) : (
+
+            <p className="text-slate-400">
+              Không có file
+            </p>
+
+          )}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+)}
       {showTimeline && (
 
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
