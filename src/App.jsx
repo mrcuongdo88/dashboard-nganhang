@@ -441,11 +441,37 @@ function getLastUpdateInfo(
   updatedAt
 ) {
 
-  const now =
-    new Date()
+  if (!updatedAt) {
+
+    return {
+
+      label:
+        '⚪ Chưa cập nhật',
+
+      color:
+        'text-slate-400'
+    }
+  }
 
   const updated =
     new Date(updatedAt)
+
+  if (
+    isNaN(updated.getTime())
+  ) {
+
+    return {
+
+      label:
+        '⚪ Chưa cập nhật',
+
+      color:
+        'text-slate-400'
+    }
+  }
+
+  const now =
+    new Date()
 
   const diffMs =
     now - updated
@@ -1287,54 +1313,53 @@ async function updateNextAction(
   "
 >
 <td className="px-6 py-5">
+<div
+  className="
+    flex
+    flex-col
+    items-center
+    justify-center
+    cursor-pointer
+  "
 
-  <div className="flex items-center justify-center">
-
-    {bankInfo?.logo ? (
-
-      <div className="w-[120px] h-[56px] bg-white border border-slate-200 rounded-2xl flex items-center justify-center p-2 shadow-sm">
-
-        <img
-          src={bankInfo.logo}
-          alt={item.bank}
-          className="max-h-[36px] max-w-[90px] object-contain"
-        />
-<p
-  className={`
-
-    text-xs
-    mt-2
-    font-medium
-
-    ${
-      getLastUpdateInfo(
-        item.updated_at
-      ).color
-    }
-
-  `}
+  onClick={() =>
+    openCaseDetail(item)
+  }
 >
 
-  {
-    getLastUpdateInfo(
-      item.updated_at
-    ).label
-  }
+  <img
+    src={bankInfo.logo}
+    alt={item.bank}
 
-</p>
-      </div>
+    className="
+      max-h-[38px]
+      object-contain
+    "
+  />
 
-    ) : (
+  <p
+    className={`
+      text-[11px]
+      mt-2
+      font-medium
+      text-center
+      ${
+        getLastUpdateInfo(
+          item.updated_at
+        ).color
+      }
+    `}
+  >
 
-      <div className="w-[120px] h-[56px] bg-slate-100 rounded-2xl flex items-center justify-center text-slate-400 text-sm font-medium">
+    {
+      getLastUpdateInfo(
+        item.updated_at
+      ).label
+    }
 
-        {item.bank}
+  </p>
 
-      </div>
-
-    )}
-
-  </div>
+</div>
 
 </td>
 
