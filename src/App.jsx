@@ -1139,6 +1139,24 @@ async function updateNextAction(
 
                      <td className="px-6 py-5">
 
+  <div
+    className="
+      bg-green-100
+      text-green-700
+      px-4
+      py-3
+      rounded-2xl
+      text-sm
+      font-semibold
+      max-w-[260px]
+      whitespace-pre-wrap
+    "
+  >
+
+    {getLatestTimeline(item.id)}
+
+  </div>
+
 </td>
 
                       <td className="px-6 py-5">
