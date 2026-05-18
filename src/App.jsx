@@ -112,8 +112,10 @@ const bankDirectory = [
   },
   {
     keywords: [
-      'anbinhbank',
-      'abb'
+      'abb',
+    'abbank',
+    'an binh',
+    'anbinh'
     ],
 
     name: 'An Binh Bank',
@@ -123,8 +125,8 @@ const bankDirectory = [
   },
   {
     keywords: [
-      'GPBank',
-      'GPBank'
+      'gpbank',
+      'gp'
     ],
 
     name: 'GPBank',
@@ -242,28 +244,23 @@ useEffect(() => {
       setApplications(data || [])
     }
   }
+function detectBank(bankName = '') {
 
-  function detectBank(bankName) {
+  const normalized =
+    bankName
+      .toLowerCase()
+      .trim()
 
-    if (!bankName) return null
+  return bankDirectory.find(bank =>
 
-    const normalized =
-      bankName
-        .toLowerCase()
-        .trim()
+    bank.keywords.some(keyword =>
 
-    return bankDirectory.find(
-      bank =>
-
-        bank.keywords.some(
-          keyword =>
-
-            normalized.includes(
-              keyword
-            )
-        )
+      normalized.includes(
+        keyword.toLowerCase()
+      )
     )
-  }
+  )
+}
 
   const bankSuggestions =
 
@@ -440,7 +437,70 @@ async function addNote() {
 
     return 'bg-green-100 text-green-700'
   }
+function getLastUpdateInfo(
+  updatedAt
+) {
 
+  const now =
+    new Date()
+
+  const updated =
+    new Date(updatedAt)
+
+  const diffMs =
+    now - updated
+
+  const diffDays =
+    diffMs / (
+      1000 * 60 * 60 * 24
+    )
+
+  if (diffDays < 1) {
+
+    const hours =
+      Math.max(
+        1,
+        Math.floor(
+          diffMs /
+          (1000 * 60 * 60)
+        )
+      )
+
+    return {
+
+      label:
+        `🟢 Cập nhật ${hours} giờ trước`,
+
+      color:
+        'text-green-600'
+    }
+  }
+
+  if (diffDays <= 3) {
+
+    return {
+
+      label:
+        `🟡 Cập nhật ${Math.floor(
+          diffDays
+        )} ngày trước`,
+
+      color:
+        'text-yellow-600'
+    }
+  }
+
+  return {
+
+    label:
+      `🔴 Cập nhật ${Math.floor(
+        diffDays
+      )} ngày trước`,
+
+    color:
+      'text-red-600'
+  }
+}
   function formatCurrency(value) {
 
     if (!value) return '-'
@@ -1239,7 +1299,29 @@ async function updateNextAction(
           alt={item.bank}
           className="max-h-[36px] max-w-[90px] object-contain"
         />
+<p
+  className={`
 
+    text-xs
+    mt-2
+    font-medium
+
+    ${
+      getLastUpdateInfo(
+        item.updated_at
+      ).color
+    }
+
+  `}
+>
+
+  {
+    getLastUpdateInfo(
+      item.updated_at
+    ).label
+  }
+
+</p>
       </div>
 
     ) : (
