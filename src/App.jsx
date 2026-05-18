@@ -1908,22 +1908,34 @@ async function updateNextAction(
     onClick={() => {
 
       setCreditLimit(
-        formatCurrency(
-          selectedCase.credit_limit || 0
-        )
+
+  selectedCase.credit_limit
+    ? formatCurrency(
+        selectedCase.credit_limit
       )
+    : ''
+
+)
 
       setLcValue(
-        formatCurrency(
-          selectedCase.lc_value || 0
-        )
+
+  selectedCase.lc_value
+    ? formatCurrency(
+        selectedCase.lc_value
       )
+    : ''
+
+)
 
       setUnsecuredValue(
-        formatCurrency(
-          selectedCase.unsecured_value || 0
-        )
+
+  selectedCase.unsecured_value
+    ? formatCurrency(
+        selectedCase.unsecured_value
       )
+    : ''
+
+)
 
       setEditCreditStructure(true)
     }}
