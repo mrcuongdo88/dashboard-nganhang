@@ -1476,9 +1476,12 @@ async function updateNextAction(
                       <td className="px-6 py-5">
 
                         <button
-                          onClick={() =>
-                            fetchTimeline(item.id)
-                          }
+                          onClick={(e) => {
+
+  e.stopPropagation()
+
+  openTimeline(item.id)
+}}
                           className="bg-indigo-500 text-white px-4 py-2 rounded-xl hover:bg-indigo-600"
                         >
                           Xem
