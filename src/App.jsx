@@ -1148,29 +1148,44 @@ async function updateNextAction(
                         )}
 
                       </td>
+<td className="px-6 py-5">
 
-                      <td className="px-6 py-5">
+  {item.document_url ? (
 
-                        {item.document_url ? (
+    <div className="flex flex-col gap-2">
+<p className="text-xs text-slate-400 truncate max-w-[160px]">
 
-                          <a
-                            href={item.document_url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-blue-600 underline"
-                          >
-                            📄 {item.document_name}
-                          </a>
+  {item.document_name}
 
-                        ) : (
+</p>
+      <a
+        href={item.document_url}
+        target="_blank"
+        rel="noreferrer"
+        className="bg-slate-800 text-white px-4 py-2 rounded-xl text-sm text-center hover:bg-slate-700"
+      >
+        👁 Xem PDF
+      </a>
 
-                          <span className="text-slate-400">
-                            Không có file
-                          </span>
+      <a
+        href={item.document_url}
+        download
+        className="bg-slate-100 text-slate-700 px-4 py-2 rounded-xl text-sm text-center hover:bg-slate-200"
+      >
+        ⬇ Download
+      </a>
 
-                        )}
+    </div>
 
-                      </td>
+  ) : (
+
+    <span className="text-slate-400">
+      Không có file
+    </span>
+
+  )}
+
+</td>
 
                       <td className="px-6 py-5">
 
