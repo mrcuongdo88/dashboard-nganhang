@@ -166,7 +166,10 @@ const [
 ] = useState(false)
   const [timelineNote, setTimelineNote] =
     useState('')
-
+const [
+  timelineFile,
+  setTimelineFile
+] = useState(null)
   const [selectedApplicationId,
     setSelectedApplicationId] =
     useState(null)
@@ -273,23 +276,30 @@ useEffect(() => {
               .toLowerCase()
           )
     )
+async function addTimeline(
+  applicationId,
+  action,
+  fileUrl = '',
+  fileName = ''
+) {
 
-  async function addTimeline(
-    applicationId,
-    action
-  ) {
+  await supabase
+    .from('application_timeline')
+    .insert([
+      {
+        application_id:
+          applicationId,
 
-    await supabase
-      .from('application_timeline')
-      .insert([
-        {
-          application_id:
-            applicationId,
+        action,
 
-          action
-        }
-      ])
-  }
+        file_url:
+          fileUrl,
+
+        file_name:
+          fileName
+      }
+    ])
+}
 
   async function fetchTimeline(id) {
 
@@ -314,25 +324,84 @@ setSelectedTimelineMap(prev => ({
 
     setShowTimeline(true)
   }
+async function addNote() {
 
-  async function addNote() {
+  if (
+    !timelineNote ||
+    !selectedApplicationId
+  ) return
 
-    if (
-      !timelineNote ||
-      !selectedApplicationId
-    ) return
+  let fileUrl = ''
+  let fileName = ''
 
-    await addTimeline(
-      selectedApplicationId,
-      timelineNote
-    )
+  if (timelineFile) {
 
-    setTimelineNote('')
+    const fileExt =
+      timelineFile.name
+        .split('.')
+        .pop()
 
-    fetchTimeline(
-      selectedApplicationId
-    )
+    const uploadName =
+      `${uuidv4()}.${fileExt}`
+
+    const {
+      error: uploadError
+    } =
+      await supabase.storage
+        .from('documents')
+        .upload(
+          uploadName,
+          timelineFile
+        )
+
+    if (!uploadError) {
+
+      const { data } =
+        supabase.storage
+          .from('documents')
+          .getPublicUrl(uploadName)
+
+      fileUrl =
+        data.publicUrl
+
+      fileName =
+        timelineFile.name
+
+      await supabase
+        .from('applications')
+        .update({
+
+          document_url:
+            fileUrl,
+
+          document_name:
+            fileName
+
+        })
+        .eq(
+          'id',
+          selectedApplicationId
+        )
+    }
   }
+
+  await addTimeline(
+    selectedApplicationId,
+    timelineNote,
+    fileUrl,
+    fileName
+  )
+
+  setTimelineNote('')
+
+  setTimelineFile(null)
+
+  fetchTimeline(
+    selectedApplicationId
+  )
+
+  fetchApplications()
+}
 
   function calculateAging(date) {
 
@@ -1681,6 +1750,7 @@ async function updateNextAction(
             <div className="bg-slate-50 p-4 rounded-2xl mb-6 space-y-3">
 
               <textarea
+              
                 placeholder="Nhập follow-up / ghi chú / trao đổi với ngân hàng..."
                 value={timelineNote}
                 onChange={(e) =>
@@ -1690,7 +1760,25 @@ async function updateNextAction(
                 }
                 className="w-full border border-slate-200 rounded-2xl p-4 min-h-[100px]"
               />
+<input
+  type="file"
+  accept=".pdf"
 
+  onChange={(e) =>
+    setTimelineFile(
+      e.target.files[0]
+    )
+  }
+
+  className="
+    w-full
+    border
+    border-slate-200
+    rounded-2xl
+    p-3
+    bg-white
+  "
+/>
               <div className="flex justify-end">
 
                 <button
@@ -1716,7 +1804,35 @@ async function updateNextAction(
                   <p className="font-semibold text-slate-800 whitespace-pre-wrap">
                     {item.action}
                   </p>
+{item.file_url && (
 
+  <div className="mt-3">
+
+    <a
+      href={item.file_url}
+      target="_blank"
+      rel="noreferrer"
+
+      className="
+        inline-flex
+        items-center
+        gap-2
+        bg-slate-800
+        text-white
+        px-4
+        py-2
+        rounded-xl
+        text-sm
+      "
+    >
+
+      📄 {item.file_name}
+
+    </a>
+
+  </div>
+
+)}
                   <p className="text-sm text-slate-500 mt-2">
 
                     {new Date(
