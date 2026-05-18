@@ -438,10 +438,15 @@ async function addNote() {
     return 'bg-green-100 text-green-700'
   }
 function getLastUpdateInfo(
-  updatedAt
+  applicationId
 ) {
 
-  if (!updatedAt) {
+  const timelines =
+    selectedTimelineMap[
+      applicationId
+    ] || []
+
+  if (!timelines.length) {
 
     return {
 
@@ -452,23 +457,14 @@ function getLastUpdateInfo(
         'text-slate-400'
     }
   }
+
+  const latest =
+    timelines[0]
 
   const updated =
-    new Date(updatedAt)
-
-  if (
-    isNaN(updated.getTime())
-  ) {
-
-    return {
-
-      label:
-        '⚪ Chưa cập nhật',
-
-      color:
-        'text-slate-400'
-    }
-  }
+    new Date(
+      latest.created_at
+    )
 
   const now =
     new Date()
@@ -1345,7 +1341,7 @@ async function updateNextAction(
       text-center
       ${
         getLastUpdateInfo(
-          item.updated_at
+          item.id
         ).color
       }
     `}
@@ -1353,7 +1349,7 @@ async function updateNextAction(
 
     {
       getLastUpdateInfo(
-        item.updated_at
+        item.id
       ).label
     }
 
