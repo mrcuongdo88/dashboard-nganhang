@@ -584,9 +584,7 @@ function getLastUpdateInfo(
       'vi-VN'
     )
   }
-function getLatestTimeline(id) {
-
- function getNextAction(
+function getNextAction(
   application
 ) {
 
@@ -594,7 +592,6 @@ function getLatestTimeline(id) {
     application.next_action
     || '-'
   )
-}
 }
 async function openCaseDetail(item) {
 
@@ -1452,7 +1449,7 @@ async function updateNextAction(
     "
   >
 
-    {getLatestTimeline(item.id)}
+    {getNextAction(item)}
 
   </div>
 
