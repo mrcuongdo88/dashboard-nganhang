@@ -1961,7 +1961,7 @@ async function updateNextAction(
 
           <div className="bg-green-100 text-green-700 px-4 py-4 rounded-2xl font-semibold whitespace-pre-wrap">
 
-            {getLatestTimeline(selectedCase.id)}
+            {getNextAction(selectedCase)}
 
           </div>
 
