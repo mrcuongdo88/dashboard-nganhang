@@ -189,6 +189,15 @@ const [
   const [timelineNote, setTimelineNote] =
     useState('')
 const [
+  timelineFollowupDate,
+  setTimelineFollowupDate
+] = useState('')
+
+const [
+  timelineNextAction,
+  setTimelineNextAction
+] = useState('')    
+const [
   timelineFile,
   setTimelineFile
 ] = useState(null)
@@ -408,11 +417,30 @@ async function addNote() {
     fileUrl,
     fileName
   )
+await supabase
+  .from('applications')
 
+  .update({
+
+    next_followup_date:
+      timelineFollowupDate
+        || null,
+
+    next_action:
+      timelineNextAction
+        || null
+  })
+
+  .eq(
+    'id',
+    selectedApplicationId
+  )
   setTimelineNote('')
 
   setTimelineFile(null)
+setTimelineFollowupDate('')
 
+setTimelineNextAction('')
   fetchTimeline(
     selectedApplicationId
   )
@@ -2245,6 +2273,57 @@ async function updateNextAction(
                 }
                 className="w-full border border-slate-200 rounded-2xl p-4 min-h-[100px]"
               />
+              <input
+  type="date"
+
+  value={
+    timelineFollowupDate
+  }
+
+  onChange={(e) =>
+    setTimelineFollowupDate(
+      e.target.value
+    )
+  }
+
+  className="
+    w-full
+    border
+    border-slate-200
+    rounded-2xl
+    p-3
+    bg-white
+    mt-3
+  "
+/>
+
+<input
+  type="text"
+
+  placeholder="
+    Next Action đề xuất
+  "
+
+  value={
+    timelineNextAction
+  }
+
+  onChange={(e) =>
+    setTimelineNextAction(
+      e.target.value
+    )
+  }
+
+  className="
+    w-full
+    border
+    border-slate-200
+    rounded-2xl
+    p-3
+    bg-white
+    mt-3
+  "
+/>
 <input
   type="file"
   accept=".pdf"
