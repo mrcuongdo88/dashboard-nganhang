@@ -586,10 +586,13 @@ function getLastUpdateInfo(
   }
 function getLatestTimeline(id) {
 
-  function getNextAction(item) {
+ function getNextAction(
+  application
+) {
 
   return (
-    item.next_action || '-'
+    application.next_action
+    || '-'
   )
 }
 }
