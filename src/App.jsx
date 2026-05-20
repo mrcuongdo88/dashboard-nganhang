@@ -298,13 +298,7 @@ const [
   const [timelineNote, setTimelineNote] =
     useState('')
     const suggestedChecklist =
-useEffect(() => {
 
-  setTimelineChecklist(
-    suggestedChecklist
-  )
-
-}, [timelineNote])
   Object.entries(
     checklistKeywordMap
   )
@@ -321,6 +315,14 @@ useEffect(() => {
   .map(([, checklist]) =>
     checklist
   )
+
+useEffect(() => {
+
+  setTimelineChecklist(
+    suggestedChecklist
+  )
+
+}, [timelineNote])
 const [
   timelineFollowupDate,
   setTimelineFollowupDate
