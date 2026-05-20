@@ -205,6 +205,46 @@ const masterChecklist = [
     ]
   }
 ]
+const checklistKeywordMap = {
+
+  vat: 'VAT',
+
+  bctc:
+    'BCTC kiểm toán',
+
+  kiểm toán:
+    'BCTC kiểm toán',
+
+  tài sản:
+    'Hồ sơ TSĐB',
+
+  tsđb:
+    'Hồ sơ TSĐB',
+
+  sao kê:
+    'Sao kê dư nợ,Dòng tiền về tài khoản',
+
+  dòng tiền:
+    'Sao kê dư nợ,Dòng tiền về tài khoản',
+
+  khế ước:
+    'Khế ước nhận nợ',
+
+  hợp đồng:
+    'Hợp đồng đầu ra',
+
+  invoice:
+    'Invoice / PO',
+
+  po:
+    'Invoice / PO',
+
+  cccd:
+    'CCCD người đại diện',
+
+  điều lệ:
+    'Điều lệ'
+}
 export default function App() {
 
   const [applications, setApplications] =
@@ -802,11 +842,9 @@ async function saveCreditStructure() {
     if (selectedFile) {
 
       const fileExt =
-        selectedFile.name
-        document_name: selectedFile.name
-          .split('.')
-          .pop()
-
+  selectedFile.name
+    .split('.')
+    .pop()
       const fileName =
         `${uuidv4()}.${fileExt}`
 
@@ -932,8 +970,7 @@ setSelectedChecklist([])
     }
   }
 
-  async function updateStatus(id, value) {
-async function updateNextAction(
+  async function updateNextAction(
   id,
   value
 ) {
@@ -966,6 +1003,8 @@ async function updateNextAction(
     )
   )
 }
+
+async function updateStatus(id, value) {
     const { error } =
       await supabase
         .from('applications')
