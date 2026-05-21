@@ -1141,14 +1141,7 @@ async function updateStatus(id, value) {
           search.toLowerCase()
         )
     })
-let mobileApplications =
-  filteredApplications
-
-if (
-  activeMobileTab ===
-  'followup'
-) {
-const mobileTabTitle = {
+    const mobileTabTitle = {
 
   home:
     'Dashboard Overview',
@@ -1159,6 +1152,12 @@ const mobileTabTitle = {
   followup:
     'Cases Need Follow-up'
 }
+
+let mobileApplications =
+  filteredApplications
+let mobileApplications =
+  filteredApplications
+
   mobileApplications =
     filteredApplications.filter(
 
@@ -1839,7 +1838,7 @@ if (
   </div>
 
 </div>
-  {filteredApplications.map(item => {
+  {mobileApplications.map(item => {
 
     const aging =
       calculateAging(
@@ -3468,4 +3467,3 @@ if (
 </div>
     </div>
   )
-}
