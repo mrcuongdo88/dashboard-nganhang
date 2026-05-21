@@ -1443,8 +1443,14 @@ async function updateStatus(id, value) {
 
         </div>
 
-        <div className="bg-white rounded-3xl shadow-sm overflow-hidden">
-
+        <div className="
+  hidden
+  lg:block
+  bg-white
+  rounded-3xl
+  shadow-sm
+  overflow-hidden
+">
           <div className="overflow-x-auto">
 
             <table className="w-full">
@@ -1722,7 +1728,213 @@ async function updateStatus(id, value) {
           </div>
 
         </div>
+<div className="
+  lg:hidden
+  space-y-4
+">
 
+  {filteredApplications.map(item => {
+
+    const aging =
+      calculateAging(
+        item.submission_date
+      )
+
+    const bankInfo =
+      detectBank(item.bank)
+
+    return (
+
+      <div
+        key={item.id}
+
+        onClick={() =>
+          openCaseDetail(item)
+        }
+
+        className="
+          bg-white
+          rounded-3xl
+          p-5
+          shadow-sm
+          space-y-4
+        "
+      >
+
+        <div className="
+          flex
+          items-center
+          justify-between
+        ">
+
+          <div className="
+            flex
+            items-center
+            gap-3
+          ">
+
+            <img
+              src={bankInfo.logo}
+              alt={item.bank}
+
+              className="
+                h-10
+                object-contain
+              "
+            />
+
+            <div>
+
+              <h3 className="
+                font-bold
+                text-slate-800
+              ">
+
+                {item.bank}
+
+              </h3>
+
+              <p className="
+                text-sm
+                text-slate-500
+              ">
+
+                {item.file_type}
+
+              </p>
+
+            </div>
+
+          </div>
+
+          <button
+
+            onClick={(e) => {
+
+              e.stopPropagation()
+
+              fetchTimeline(item.id)
+            }}
+
+            className="
+              bg-indigo-500
+              text-white
+              px-4
+              py-2
+              rounded-xl
+              text-sm
+            "
+          >
+
+            Timeline
+
+          </button>
+
+        </div>
+
+        <div className="
+          grid
+          grid-cols-2
+          gap-3
+        ">
+
+          <div className="
+            bg-slate-50
+            rounded-2xl
+            p-3
+          ">
+
+            <p className="
+              text-xs
+              text-slate-500
+            ">
+
+              Giá trị
+
+            </p>
+
+            <p className="
+              font-bold
+              text-slate-800
+              mt-1
+            ">
+
+              {formatCurrency(item.amount)}
+
+            </p>
+
+          </div>
+
+          <div className="
+            bg-slate-50
+            rounded-2xl
+            p-3
+          ">
+
+            <p className="
+              text-xs
+              text-slate-500
+            ">
+
+              Aging
+
+            </p>
+
+            <span
+              className={`
+                inline-block
+                mt-1
+                px-2
+                py-1
+                rounded-full
+                text-xs
+                font-semibold
+
+                ${getAgingColor(aging)}
+              `}
+            >
+
+              {aging} ngày
+
+            </span>
+
+          </div>
+
+        </div>
+
+        <div className="
+          bg-green-50
+          rounded-2xl
+          p-4
+        ">
+
+          <p className="
+            text-xs
+            text-green-700
+            font-semibold
+            mb-2
+          ">
+
+            NEXT ACTION
+
+          </p>
+
+          <p className="
+            text-sm
+            text-slate-700
+          ">
+
+            {getNextAction(item)}
+
+          </p>
+
+        </div>
+
+      </div>
+    )
+  })}
+
+</div>
       </div>
 
       {showModal && (
