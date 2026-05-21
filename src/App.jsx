@@ -261,7 +261,10 @@ const [
 
   const [selectedFile, setSelectedFile] =
     useState(null)
-
+const [
+  activeMobileTab,
+  setActiveMobileTab
+] = useState('home')
   const [selectedTimeline, setSelectedTimeline] =
     useState([])
 const [
@@ -1131,7 +1134,34 @@ async function updateStatus(id, value) {
           search.toLowerCase()
         )
     })
+const mobileApplications =
 
+  activeMobileTab ===
+  'followup'
+
+    ? filteredApplications.filter(
+
+        item => {
+
+          if (
+            !item.next_followup_date
+          ) return false
+
+          const today =
+            new Date()
+
+          const followup =
+            new Date(
+              item.next_followup_date
+            )
+
+          return (
+            followup <= today
+          )
+        }
+      )
+
+    : filteredApplications
   const processingCount =
     applications.filter(item => {
 
@@ -1504,7 +1534,7 @@ async function updateStatus(id, value) {
 
               <tbody>
 
-                {filteredApplications.map(item => {
+                {mobileApplications.map(item => {
 
                   const aging =
                     calculateAging(
@@ -3180,6 +3210,157 @@ async function updateStatus(id, value) {
       </button>
 
     </div>
+
+  </div>
+
+</div>
+{/* MOBILE BOTTOM NAV */}
+
+<div className="
+  fixed
+  bottom-0
+  left-0
+  right-0
+  lg:hidden
+  bg-white
+  border-t
+  border-slate-200
+  z-40
+">
+
+  <div className="
+    grid
+    grid-cols-4
+  ">
+
+    <button
+
+      onClick={() =>
+        setActiveMobileTab(
+          'home'
+        )
+      }
+
+      className={`
+        py-4
+        text-sm
+        font-medium
+
+        ${
+          activeMobileTab ===
+          'home'
+
+          ? `
+            text-indigo-600
+          `
+
+          : `
+            text-slate-400
+          `
+        }
+      `}
+    >
+
+      🏠
+
+      <div>Home</div>
+
+    </button>
+
+    <button
+
+      onClick={() =>
+        setActiveMobileTab(
+          'cases'
+        )
+      }
+
+      className={`
+        py-4
+        text-sm
+        font-medium
+
+        ${
+          activeMobileTab ===
+          'cases'
+
+          ? `
+            text-indigo-600
+          `
+
+          : `
+            text-slate-400
+          `
+        }
+      `}
+    >
+
+      📋
+
+      <div>Cases</div>
+
+    </button>
+
+    <button
+
+      onClick={() =>
+        setActiveMobileTab(
+          'followup'
+        )
+      }
+
+      className={`
+        py-4
+        text-sm
+        font-medium
+
+        ${
+          activeMobileTab ===
+          'followup'
+
+          ? `
+            text-indigo-600
+          `
+
+          : `
+            text-slate-400
+          `
+        }
+      `}
+    >
+
+      📅
+
+      <div>Follow-up</div>
+
+    </button>
+
+    <button
+
+      onClick={() => {
+
+        window.scrollTo({
+
+          top: 0,
+
+          behavior:
+            'smooth'
+        })
+      }}
+
+      className="
+        py-4
+        text-sm
+        font-medium
+        text-slate-400
+      "
+    >
+
+      ⚙️
+
+      <div>More</div>
+
+    </button>
 
   </div>
 
