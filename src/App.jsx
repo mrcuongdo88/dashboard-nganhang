@@ -1562,39 +1562,7 @@ if (
               </thead>
 
               <tbody>
-<div className="
-  flex
-  items-center
-  justify-between
-  mb-2
-">
 
-  <h2 className="
-    text-lg
-    font-bold
-    text-slate-800
-  ">
-
-    {
-      mobileTabTitle[
-        activeMobileTab
-      ]
-    }
-
-  </h2>
-
-  <div className="
-    text-sm
-    text-slate-500
-  ">
-
-    {mobileApplications.length}
-
-    hồ sơ
-
-  </div>
-
-</div>
                 {mobileApplications.map(item => {
 
                   const aging =
@@ -1838,7 +1806,39 @@ if (
     lg:hidden
     space-y-4
 ">
+<div className="
+  flex
+  items-center
+  justify-between
+  mb-2
+">
 
+  <h2 className="
+    text-lg
+    font-bold
+    text-slate-800
+  ">
+
+    {
+      mobileTabTitle[
+        activeMobileTab
+      ]
+    }
+
+  </h2>
+
+  <div className="
+    text-sm
+    text-slate-500
+  ">
+
+    {mobileApplications.length}
+
+    hồ sơ
+
+  </div>
+
+</div>
   {filteredApplications.map(item => {
 
     const aging =
