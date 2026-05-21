@@ -1152,11 +1152,13 @@ async function updateStatus(id, value) {
   followup:
     'Cases Need Follow-up'
 }
+let mobileApplications =
+  filteredApplications
 
-let mobileApplications =
-  filteredApplications
-let mobileApplications =
-  filteredApplications
+if (
+  activeMobileTab ===
+  'followup'
+) {
 
   mobileApplications =
     filteredApplications.filter(
@@ -1189,6 +1191,7 @@ if (
 
   mobileApplications =
     filteredApplications.slice(0, 5)
+}
 }
   const processingCount =
     applications.filter(item => {
@@ -3232,7 +3235,7 @@ if (
       <button
 
         onClick={() =>
-          setShowAddModal(true)
+          setShowModal(true)
         }
 
         className="
